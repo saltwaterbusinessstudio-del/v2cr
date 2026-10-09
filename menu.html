@@ -1,16 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Menu &amp; Preorder | Cassidy's Reserve</title>
   <meta name="description" content="Preorder organic sourdough bread, muffins, cinnamon rolls, brownies, granola and more from Cassidy's Reserve.">
+
   <link rel="icon" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,0..72,400&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header class="site-header">
@@ -19,6 +23,7 @@
       <img src="logo.png" alt="">
       <span>Cassidy's Reserve</span>
     </a>
+
     <nav class="nav" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="faq.html">FAQ</a>
@@ -28,6 +33,7 @@
 </header>
 
 <main>
+
   <div class="page-head">
     <div class="wrap">
       <h1>Menu &amp; Preorder</h1>
@@ -35,7 +41,11 @@
     </div>
   </div>
 
-  <div class="wrap" id="menu"></div>
+  <div class="wrap" id="menu">
+
+    <!-- Product categories and cards are rendered from MENU below. -->
+
+  </div>
 
   <section class="alt" id="pay" style="margin-top:3.5rem">
     <div class="wrap">
@@ -43,15 +53,18 @@
         <h2>How to pay</h2>
         <p>Preorders can be paid securely online with the Preorder buttons above. We also accept the options below.</p>
       </div>
+
       <div class="how-to">
         <div class="pay-card">
           <h3>Zelle</h3>
           <strong>740-278-2412</strong>
         </div>
+
         <div class="pay-card">
           <h3>Cash App</h3>
           <strong>$vbarone</strong>
         </div>
+
         <div class="pay-card">
           <h3>PayPal</h3>
           <p>Available upon order</p>
@@ -66,6 +79,7 @@
         <h2>Quality ingredients in everything we make</h2>
         <p>All of our breads and baked goods contain the following premium or organic ingredients.</p>
       </div>
+
       <ul class="ingredients">
         <li>Imported Caputo flour</li>
         <li>Imported Poselli flour</li>
@@ -88,6 +102,7 @@
       </ul>
     </div>
   </section>
+
 </main>
 
 <footer class="site-footer">
@@ -97,6 +112,7 @@
       <p>Sourdough &amp; Specialty Bakes</p>
       <p>Part of Cassidy's Homestead</p>
     </div>
+
     <div>
       <h3>Explore</h3>
       <ul>
@@ -104,11 +120,13 @@
         <li><a href="faq.html">FAQ</a></li>
       </ul>
     </div>
+
     <div>
       <h3>Contact</h3>
       <p><span class="tbd" style="color:#2b2b2c">[Add email / phone / social link]</span></p>
     </div>
-    <p class="legal">&copy; <span id="yr">2026</span> Cassidy's Reserve. All rights reserved.</p>
+
+    <p class="legal">© <span id="yr">2026</span> Cassidy's Reserve. All rights reserved.</p>
   </div>
 </footer>
 
@@ -116,16 +134,8 @@
 /* ==========================================================
    MENU DATA + STRIPE LINKS
 
-   IMAGE:
-   Enter the exact image path for each item in the `image` field.
-
-   Examples:
-   image: "images/plain-sourdough.jpeg"
-   image: "images/jalapeno-cheddar.jpg"
-
-   You can also use a full image URL:
-   image: "https://example.com/photo.jpg"
-
+   Add product image paths in the image field.
+   Add Stripe payment links in the stripe field when ready.
    ========================================================== */
 
 const MENU = [
@@ -150,7 +160,6 @@ const MENU = [
         price: 13,
         stripe: "",
         image: "images/blueberryloaf.jpeg"
-      
       },
       {
         name: "Pumpkin Spice",
@@ -234,41 +243,63 @@ const MENU = [
 
 const root = document.getElementById("menu");
 
-const esc = s => s.replace(/[&<>"]/g, c => ({
+const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
   "&": "&amp;",
   "<": "&lt;",
   ">": "&gt;",
-  '"': "&quot;"
-}[c]));
+  '"': "&quot;",
+  "'": "&#39;"
+}[char]));
+
+const slug = value => value
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-|-$/g, "");
 
 root.innerHTML = MENU.map(cat => `
-  <div class="menu-cat">
-    <h2>${esc(cat.title)}${cat.note ? `<small>${esc(cat.note)}</small>` : ""}</h2>
-    ${cat.items.map(it => {
-      const live = it.stripe && it.stripe.trim() !== "";
-      const href = live ? esc(it.stripe) : "#pay";
-      const ext = live ? ' target="_blank" rel="noopener"' : "";
-      const img = it.image;
+  <section class="menu-cat" id="category-${slug(cat.title)}">
 
-      return `
-      <div class="menu-item">
-        <div class="photo">
-          ${img ? `<img src="${esc(img)}" alt="${esc(it.name)}" loading="lazy" onerror="this.remove()">` : ""}
-        </div>
-        <div class="info">
-          <div class="line">
-            <span class="name">${esc(it.name)}</span>
-            <span class="dots"></span>
-            <span class="price">$${it.price}</span>
-          </div>
-          ${it.note ? `<p class="note">${esc(it.note)}</p>` : ""}
-          <div class="order">
-            <a class="btn small ghost" href="${href}"${ext} aria-label="Preorder ${esc(it.name)}">Preorder</a>
-          </div>
-        </div>
-      </div>`;
-    }).join("")}
-  </div>
+    <div class="menu-cat-heading">
+      <h2>${esc(cat.title)}</h2>
+      ${cat.note ? `<span class="menu-cat-note">${esc(cat.note)}</span>` : ""}
+    </div>
+
+    <div class="product-grid">
+      ${cat.items.map(it => {
+        const live = it.stripe && it.stripe.trim() !== "";
+        const href = live ? esc(it.stripe) : "#pay";
+        const ext = live ? ' target="_blank" rel="noopener"' : "";
+        const img = it.image;
+
+        return `
+          <article class="menu-item">
+
+            <div class="photo${img ? "" : " photo-placeholder"}">
+              ${img
+                ? `<img src="${esc(img)}" alt="${esc(it.name)}" loading="lazy" onerror="this.remove()">`
+                : `<span class="placeholder-mark" aria-hidden="true">Cassidy's Reserve</span>`
+              }
+            </div>
+
+            <div class="info">
+              <div class="line">
+                <h3 class="name">${esc(it.name)}</h3>
+                <span class="price">$${Number(it.price).toFixed(0)}</span>
+              </div>
+
+              <a
+                class="btn small ghost order"
+                href="${href}"${ext}
+                aria-label="Preorder ${esc(it.name)}"
+              >Preorder</a>
+            </div>
+
+          </article>
+        `;
+      }).join("")}
+    </div>
+
+  </section>
 `).join("");
 
 document.getElementById("yr").textContent = new Date().getFullYear();

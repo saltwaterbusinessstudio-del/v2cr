@@ -471,3 +471,179 @@ section { padding-block: clamp(3rem, 7vw, 5.5rem); }
     text-align: left;
   }
 }
+
+
+/* ---------- NEW MENU CARD LAYOUT ---------- */
+
+/* Category heading and optional note */
+.menu-cat-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  padding-bottom: .9rem;
+  border-bottom: 2px solid var(--charcoal);
+  margin-bottom: 1.5rem;
+}
+
+.menu-cat-heading h2 {
+  margin: 0;
+}
+
+.menu-cat-note {
+  font-family: var(--sans);
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+/* Responsive product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem 1.5rem;
+}
+
+/* Individual product card */
+.product-grid .menu-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 3px;
+  overflow: hidden;
+  gap: 0;
+}
+
+/* Product photography */
+.product-grid .menu-item .photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background-color: var(--flour);
+  background-image: none;
+  position: relative;
+}
+
+.product-grid .menu-item .photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .25s ease;
+}
+
+.product-grid .menu-item:hover .photo img {
+  transform: scale(1.03);
+}
+
+/* Placeholder for products without an image */
+.product-grid .menu-item .photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--flour);
+  padding: 1rem;
+}
+
+.product-grid .placeholder-mark {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Product name, price, and preorder button */
+.product-grid .menu-item .info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 1.2rem;
+}
+
+.product-grid .menu-item .line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+.product-grid .menu-item .name {
+  flex: 1 1 120px;
+  min-width: 0;
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--charcoal);
+}
+
+.product-grid .menu-item .price {
+  flex: none;
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  line-height: 1.25;
+  color: var(--charcoal);
+  font-variant-numeric: tabular-nums;
+}
+
+.product-grid .menu-item .order {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: .8rem;
+}
+
+/* Give each preorder button consistent spacing */
+.product-grid .menu-item .info > .order {
+  margin-top: 1.1rem;
+}
+
+/* ---------- MENU CARD RESPONSIVE LAYOUT ---------- */
+
+@media (max-width: 860px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .85rem;
+  }
+
+  .product-grid .menu-item .info {
+    padding: .85rem;
+  }
+
+  .product-grid .menu-item .name,
+  .product-grid .menu-item .price {
+    font-size: 1.1rem;
+  }
+
+  .product-grid .menu-item .line {
+    gap: .45rem;
+  }
+
+  .product-grid .menu-item .order {
+    font-size: .8rem;
+    padding: .6rem .75rem;
+  }
+
+  .menu-cat-heading h2 {
+    font-size: 1.8rem;
+  }
+}
+ 
+@media (max-width: 360px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
