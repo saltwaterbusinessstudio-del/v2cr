@@ -59,6 +59,13 @@ p { margin: 0 0 1em; max-width: 62ch; }
   padding: .85rem 1.4rem; border-radius: 2px; border: 1.5px solid var(--charcoal);
   transition: background .15s, color .15s, border-color .15s;
 }
+
+.site-header .nav a.btn.small,
+.site-header .nav a.btn.small:link,
+.site-header .nav a.btn.small:visited {
+  color: var(--paper);
+}
+
 .btn:hover { background: var(--wheat-dark); border-color: var(--wheat-dark); color: #fff; }
 .btn.ghost { background: transparent; color: var(--charcoal); }
 .btn.ghost:hover { background: var(--charcoal); border-color: var(--charcoal); color: var(--paper); }
@@ -1085,3 +1092,5 @@ section { padding-block: clamp(3rem, 7vw, 5.5rem); }
     transition: none;
   }
 }
+
+
