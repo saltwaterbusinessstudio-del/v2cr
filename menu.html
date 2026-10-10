@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+<script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -24,11 +25,52 @@
       <span>Cassidy's Reserve</span>
     </a>
 
-    <nav class="nav" aria-label="Main">
-      <a href="index.html">Home</a>
-      <a href="faq.html">FAQ</a>
-      <a class="btn small" href="menu.html" aria-current="page">Menu &amp; Preorder</a>
-    </nav>
+    
+<nav class="nav" aria-label="Main">
+  <a href="index.html">Home</a>
+  <a href="faq.html">FAQ</a>
+  <a class="btn small" href="menu.html" aria-current="page">Menu &amp; Preorder</a>
+
+  <div class="header-cart" id="header-cart">
+    <button
+      type="button"
+      class="header-cart-button"
+      id="cart-toggle"
+      aria-label="Open shopping cart"
+      aria-expanded="false"
+      aria-controls="cart-drawer"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.5L21 8H6" />
+        <circle cx="10" cy="20" r="1" />
+        <circle cx="18" cy="20" r="1" />
+      </svg>
+      <span class="header-cart-label">Cart</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
+
+    <div class="cart-drawer" id="cart-drawer" hidden>
+      <div class="cart-drawer-heading">
+        <h2>Your cart</h2>
+        <button type="button" class="cart-close" id="cart-close" aria-label="Close cart">×</button>
+      </div>
+
+      <div id="cart-preview-items" aria-live="polite">
+        <p class="cart-preview-empty">Your cart is empty.</p>
+      </div>
+
+      <div class="cart-preview-footer">
+        <div class="cart-preview-subtotal">
+          <span>Subtotal</span>
+          <strong id="cart-preview-total">$0.00</strong>
+        </div>
+        <a class="btn cart-view-button" href="cart.html">View cart</a>
+        <p class="cart-preview-note">Pickup details and payment are completed at checkout.</p>
+      </div>
+    </div>
+  </div>
+</nav>
+
   </div>
 </header>
 
@@ -47,11 +89,14 @@
 
   </div>
 
+
+
+
   <section class="alt" id="pay" style="margin-top:3.5rem">
     <div class="wrap">
       <div class="section-head">
         <h2>How to pay</h2>
-        <p>Preorders can be paid securely online with the Preorder buttons above. We also accept the options below.</p>
+        <p>Add your favorites to your cart to place a preorder and pay with our secure checkout. Contact us if you prefer to arrange an alternative payment method.</p>
       </div>
 
       <div class="how-to">
@@ -130,180 +175,333 @@
   </div>
 </footer>
 
+
+
 <script>
-/* ==========================================================
-   MENU DATA + STRIPE LINKS
-
-   Add product image paths in the image field.
-   Add Stripe payment links in the stripe field when ready.
-   ========================================================== */
-
 const MENU = [
   {
     title: "Organic Sourdough Bread",
     note: "Per loaf",
     items: [
-      {
-        name: "Plain Sourdough",
-        price: 10,
-        stripe: "",
-        image: "images/plain-sourdough.jpeg"
-      },
-      {
-        name: "Jalapeño Cheddar",
-        price: 13,
-        stripe: "",
-        image: ""
-      },
-      {
-        name: "Blueberry Lemon",
-        price: 13,
-        stripe: "",
-        image: "images/blueberryloaf.jpeg"
-      },
-      {
-        name: "Pumpkin Spice",
-        price: 13,
-        stripe: "",
-        image: ""
-      },
-      {
-        name: "Banana",
-        price: 13,
-        stripe: "",
-        image: ""
-      }
+      { name: "Plain Sourdough", price: 10, image: "images/plain-sourdough.jpeg" },
+      { name: "Jalapeño Cheddar", price: 13, image: "" },
+      { name: "Blueberry Lemon", price: 13, image: "images/blueberryloaf.jpeg" },
+      { name: "Pumpkin Spice", price: 13, image: "" },
+      { name: "Banana", price: 13, image: "" }
     ]
   },
   {
     title: "Specialty",
     items: [
-      {
-        name: "Homemade Pasta",
-        price: 7,
-        stripe: "",
-        image: ""
-      },
-      {
-        name: "Dubai Pistachio Granola",
-        price: 6,
-        stripe: "",
-        image: ""
-      },
-      {
-        name: "Italian Style Organic Sourdough Croutons",
-        price: 6,
-        stripe: "",
-        image: ""
-      }
+      { name: "Homemade Pasta", price: 7, image: "" },
+      { name: "Dubai Pistachio Granola", price: 6, image: "" },
+      { name: "Italian Style Organic Sourdough Croutons", price: 6, image: "" }
     ]
   },
   {
     title: "Baked Goods",
     items: [
-      {
-        name: "Banana Walnut Muffin",
-        price: 4,
-        stripe: "",
-        image: "images/bananawalnutmuffin.jpeg"
-      },
-      {
-        name: "Cherry Nut Bread Muffins",
-        price: 4,
-        stripe: "",
-        image: ""
-      },
-      {
-        name: "Chocolate Cake",
-        price: 5,
-        stripe: "",
-        image: ""
-      },
-      {
-        name: "Fudgy Brownies",
-        price: 5,
-        stripe: "",
-        image: "images/goldbrownies.jpeg"
-      },
-      {
-        name: "Cinnamon Rolls",
-        price: 6,
-        stripe: "",
-        image: "images/cinnamonroll.jpeg"
-      },
-      {
-        name: "Chocolate Chunk Sourdough Cookies",
-        price: 2,
-        stripe: "",
-        image: "images/chocolatechunkcookie.jpeg"
-      }
+      { name: "Banana Walnut Muffin", price: 4, image: "images/bananawalnutmuffin.jpeg" },
+      { name: "Cherry Nut Bread Muffins", price: 4, image: "" },
+      { name: "Chocolate Cake", price: 5, image: "" },
+      { name: "Fudgy Brownies", price: 5, image: "images/goldbrownies.jpeg" },
+      { name: "Cinnamon Rolls", price: 6, image: "images/cinnamonroll.jpeg" },
+      { name: "Chocolate Chunk Sourdough Cookies", price: 2, image: "images/chocolatechunkcookie.jpeg" }
     ]
   }
 ];
 
+const STORAGE_KEY = "cassidys-reserve-cart-v1";
 const root = document.getElementById("menu");
+const cartHost = document.getElementById("header-cart");
+const cartToggle = document.getElementById("cart-toggle");
+const cartDrawer = document.getElementById("cart-drawer");
+const cartClose = document.getElementById("cart-close");
+const cartCount = document.getElementById("cart-count");
+const previewItems = document.getElementById("cart-preview-items");
+const previewTotal = document.getElementById("cart-preview-total");
 
-const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': "&quot;",
-  "'": "&#39;"
-}[char]));
+const products = new Map(
+  MENU.flatMap(category =>
+    category.items.map(item => [item.name, item])
+  )
+);
+
+const money = amount =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  }).format(amount);
+
+const esc = value =>
+  String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
 
 const slug = value => value
   .toLowerCase()
   .replace(/[^a-z0-9]+/g, "-")
   .replace(/^-|-$/g, "");
 
-root.innerHTML = MENU.map(cat => `
-  <section class="menu-cat" id="category-${slug(cat.title)}">
+function loadCart() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const valid = new Map();
 
-    <div class="menu-cat-heading">
-      <h2>${esc(cat.title)}</h2>
-      ${cat.note ? `<span class="menu-cat-note">${esc(cat.note)}</span>` : ""}
-    </div>
+    if (!Array.isArray(saved)) return valid;
 
-    <div class="product-grid">
-      ${cat.items.map(it => {
-        const live = it.stripe && it.stripe.trim() !== "";
-        const href = live ? esc(it.stripe) : "#pay";
-        const ext = live ? ' target="_blank" rel="noopener"' : "";
-        const img = it.image;
+    for (const entry of saved) {
+      const item = products.get(entry?.name);
+      const quantity = Number(entry?.quantity);
 
-        return `
+      if (item && Number.isInteger(quantity) && quantity > 0) {
+        valid.set(item.name, Math.min(50, quantity));
+      }
+    }
+
+    return valid;
+  } catch {
+    return new Map();
+  }
+}
+
+const cart = loadCart();
+
+function saveCart() {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(
+        [...cart.entries()].map(([name, quantity]) => ({ name, quantity }))
+      )
+    );
+  } catch {
+    showToast("Your cart could not be saved in this browser.");
+  }
+}
+
+function getCartTotals() {
+  let quantity = 0;
+  let subtotal = 0;
+
+  for (const [name, count] of cart.entries()) {
+    const item = products.get(name);
+    if (!item) continue;
+
+    quantity += count;
+    subtotal += item.price * count;
+  }
+
+  return { quantity, subtotal };
+}
+
+function renderMenu() {
+  root.innerHTML = MENU.map(category => `
+    <section class="menu-cat" id="category-${slug(category.title)}">
+      <div class="menu-cat-heading">
+        <h2>${esc(category.title)}</h2>
+        ${category.note
+          ? `<span class="menu-cat-note">${esc(category.note)}</span>`
+          : ""}
+      </div>
+
+      <div class="product-grid">
+        ${category.items.map(item => `
           <article class="menu-item">
-
-            <div class="photo${img ? "" : " photo-placeholder"}">
-              ${img
-                ? `<img src="${esc(img)}" alt="${esc(it.name)}" loading="lazy" onerror="this.remove()">`
+            <div class="photo${item.image ? "" : " photo-placeholder"}">
+              ${item.image
+                ? `<img src="${esc(item.image)}" alt="${esc(item.name)}" loading="lazy" onerror="this.remove()">`
                 : `<span class="placeholder-mark" aria-hidden="true">Cassidy's Reserve</span>`
               }
             </div>
 
             <div class="info">
               <div class="line">
-                <h3 class="name">${esc(it.name)}</h3>
-                <span class="price">$${Number(it.price).toFixed(0)}</span>
+                <h3 class="name">${esc(item.name)}</h3>
+                <span class="price">${money(item.price)}</span>
               </div>
 
-              <a
+              <button
+                type="button"
                 class="btn small ghost order"
-                href="${href}"${ext}
-                aria-label="Preorder ${esc(it.name)}"
-              >Preorder</a>
+                data-add="${esc(item.name)}"
+                aria-label="Add ${esc(item.name)} to cart"
+              >Add to cart</button>
             </div>
-
           </article>
-        `;
-      }).join("")}
-    </div>
+        `).join("")}
+      </div>
+    </section>
+  `).join("");
+}
 
-  </section>
-`).join("");
+function renderCartPreview() {
+  const { quantity, subtotal } = getCartTotals();
 
-document.getElementById("yr").textContent = new Date().getFullYear();
+  cartCount.textContent = quantity > 99 ? "99+" : String(quantity);
+  cartCount.classList.toggle("is-empty", quantity === 0);
+  cartToggle.setAttribute(
+    "aria-label",
+    `Shopping cart, ${quantity} ${quantity === 1 ? "item" : "items"}`
+  );
+
+  previewTotal.textContent = money(subtotal);
+
+  if (cart.size === 0) {
+    previewItems.innerHTML = `
+      <p class="cart-preview-empty">Your cart is empty.</p>
+    `;
+    return;
+  }
+
+  previewItems.innerHTML = [...cart.entries()].map(([name, count]) => {
+    const item = products.get(name);
+
+    return `
+      <div class="cart-preview-row">
+        ${item.image
+          ? `<img class="cart-preview-image" src="${esc(item.image)}" alt="" onerror="this.style.display='none'">`
+          : `<div class="cart-preview-image cart-preview-placeholder" aria-hidden="true">CR</div>`
+        }
+        <div class="cart-preview-product">
+          <span class="cart-preview-name">${esc(name)}</span>
+          <span class="cart-preview-detail">${count} × ${money(item.price)}</span>
+        </div>
+        <strong class="cart-preview-line-total">${money(count * item.price)}</strong>
+        <div class="cart-preview-quantity">
+          <button type="button" data-change="${esc(name)}" data-delta="-1" aria-label="Remove one ${esc(name)}">−</button>
+          <span>${count}</span>
+          <button type="button" data-change="${esc(name)}" data-delta="1" aria-label="Add one ${esc(name)}" ${count >= 50 ? "disabled" : ""}>+</button>
+        </div>
+        <button type="button" class="cart-preview-remove" data-remove="${esc(name)}">Remove</button>
+      </div>
+    `;
+  }).join("");
+}
+
+function openCart() {
+  cartDrawer.hidden = false;
+  cartToggle.setAttribute("aria-expanded", "true");
+}
+
+function closeCart() {
+  cartDrawer.hidden = true;
+  cartToggle.setAttribute("aria-expanded", "false");
+}
+
+let cartPinnedOpen = false;
+
+cartToggle.addEventListener("click", () => {
+  cartPinnedOpen = !cartPinnedOpen;
+
+  if (cartPinnedOpen) {
+    openCart();
+  } else {
+    closeCart();
+  }
+});
+
+cartClose.addEventListener("click", () => {
+  cartPinnedOpen = false;
+  closeCart();
+});
+
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  cartHost.addEventListener("pointerenter", openCart);
+
+  cartHost.addEventListener("pointerleave", () => {
+    if (!cartPinnedOpen) closeCart();
+  });
+}
+
+document.addEventListener("click", event => {
+  if (!cartHost.contains(event.target)) {
+    cartPinnedOpen = false;
+    closeCart();
+  }
+
+  const addButton = event.target.closest("[data-add]");
+  const changeButton = event.target.closest("[data-change]");
+  const removeButton = event.target.closest("[data-remove]");
+
+  if (addButton) {
+    const name = addButton.dataset.add;
+    const current = cart.get(name) || 0;
+
+    if (!products.has(name) || current >= 50) {
+      showToast("Maximum quantity per item is 50.");
+      return;
+    }
+
+    cart.set(name, current + 1);
+    saveCart();
+    renderCartPreview();
+    showToast(`${name} added to cart.`);
+    return;
+  }
+
+  if (changeButton) {
+    const name = changeButton.dataset.change;
+    const current = cart.get(name) || 0;
+    const next = current + Number(changeButton.dataset.delta);
+
+    if (next <= 0) cart.delete(name);
+    else cart.set(name, Math.min(50, next));
+
+    saveCart();
+    renderCartPreview();
+    return;
+  }
+
+  if (removeButton) {
+    cart.delete(removeButton.dataset.remove);
+    saveCart();
+    renderCartPreview();
+    showToast("Item removed from cart.");
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    cartPinnedOpen = false;
+    closeCart();
+  }
+});
+
+let toastTimer;
+
+function showToast(message) {
+  let toast = document.getElementById("cart-toast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "cart-toast";
+    toast.className = "cart-toast";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("is-visible");
+  }, 2400);
+}
+
+renderMenu();
+renderCartPreview();
+
+const year = document.getElementById("yr");
+if (year) year.textContent = new Date().getFullYear();
 </script>
 
 </body>
 </html>
+

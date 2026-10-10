@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Your Cart | Cassidy's Reserve</title>
+  <meta name="description" content="Review your Cassidy's Reserve sourdough and specialty bake preorder.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .cart-page {
+      padding-block: clamp(2.5rem, 6vw, 5rem);
+    }
+
+    .cart-page-heading {
+      margin-bottom: 2.5rem;
+    }
+
+    .cart-page-heading .eyebrow {
+      margin-bottom: .7rem;
+      color: var(--wheat-dark);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .cart-page-heading p {
+      margin-top: 1rem;
+      color: var(--muted);
+    }
+
+    .cart-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(270px, .8fr);
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: start;
+    }
+
+    .cart-list {
+      border-top: 1px solid var(--line);
+    }
+
+    .cart-page-row {
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cart-page-image {
+      width: 86px;
+      height: 86px;
+      object-fit: cover;
+      background: var(--flour);
+      border: 1px solid var(--line);
+    }
+
+    .cart-page-placeholder {
+      display: grid;
+      place-items: center;
+      color: var(--wheat-dark);
+      font-family: var(--serif);
+      font-size: 1.5rem;
+    }
+
+    .cart-page-product h2 {
+      margin: 0 0 .3rem;
+      font-size: 1.3rem;
+      overflow-wrap: anywhere;
+    }
+
+    .cart-page-product p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .cart-page-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: .8rem;
+    }
+
+    .cart-page-controls button {
+      cursor: pointer;
+    }
+
+    .cart-page-quantity-button {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--charcoal);
+      font: inherit;
+    }
+
+    .cart-page-quantity-button:hover {
+      border-color: var(--wheat);
+    }
+
+    .cart-page-quantity {
+      min-width: 1.5rem;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cart-page-remove {
+      margin-left: .4rem;
+      padding: .2rem;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font: .8rem var(--sans);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .cart-page-line-total {
+      align-self: start;
+      padding-top: .2rem;
+      color: var(--charcoal);
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cart-empty {
+      padding: 2rem 0;
+      color: var(--muted);
+    }
+
+    .cart-empty h2 {
+      margin-bottom: .7rem;
+      font-size: 1.8rem;
+    }
+
+    .cart-empty p {
+      margin-bottom: 1.3rem;
+    }
+
+    .cart-summary-card {
+      padding: clamp(1.25rem, 3vw, 2rem);
+      background: var(--flour);
+      border: 1px solid var(--line);
+    }
+
+    .cart-summary-card h2 {
+      margin-bottom: 1.4rem;
+      font-size: 1.8rem;
+    }
+
+    .cart-summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: .7rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .cart-summary-line strong {
+      color: var(--charcoal);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .cart-summary-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1.2rem;
+      margin-top: .4rem;
+      color: var(--charcoal);
+      font-family: var(--serif);
+      font-size: 1.4rem;
+    }
+
+    .cart-summary-card .btn {
+      display: block;
+      width: 100%;
+      margin-top: 1.4rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .cart-summary-card .btn:focus-visible {
+      outline-offset: 4px;
+    }
+
+    .cart-summary-note {
+      margin: 1rem 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+      line-height: 1.6;
+    }
+
+    .pickup-card {
+      margin-top: 1.2rem;
+      padding: 1.4rem;
+      border: 1px solid var(--line);
+    }
+
+    .pickup-card .pickup-eyebrow {
+      margin-bottom: .5rem;
+      color: var(--wheat-dark);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .pickup-card h3 {
+      margin-bottom: .7rem;
+      font-size: 1.3rem;
+    }
+
+    .pickup-card p {
+      margin-bottom: .7rem;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.65;
+    }
+
+    .pickup-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .pickup-card address {
+      margin-top: .8rem;
+      color: var(--charcoal);
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    .cart-page-message {
+      min-height: 1.5rem;
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 760px) {
+      .cart-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cart-page-row {
+        grid-template-columns: 66px minmax(0, 1fr);
+        gap: .8rem;
+      }
+
+      .cart-page-image {
+        width: 66px;
+        height: 66px;
+      }
+
+      .cart-page-line-total {
+        grid-column: 2;
+        padding-top: 0;
+      }
+
+      .cart-page-product h2 {
+        font-size: 1.15rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Cassidy's Reserve home">
+        <img src="logo.png" alt="">
+        <span>Cassidy's Reserve</span>
+      </a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQ</a>
+        <a href="menu.html">Menu &amp; Preorder</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="cart-page">
+      <div class="wrap">
+        <div class="cart-page-heading">
+          <p class="eyebrow">Cassidy's Reserve</p>
+          <h1>Your Cart</h1>
+          <p>Review your selections before continuing to checkout.</p>
+        </div>
+
+        <div class="cart-layout">
+          <div>
+            <div id="cart-page-items" class="cart-list" aria-live="polite"></div>
+            <p id="cart-page-message" class="cart-page-message" role="status"></p>
+            <a class="btn ghost" href="menu.html">Continue shopping</a>
+          </div>
+
+          <aside>
+            <div class="cart-summary-card">
+              <h2>Order Summary</h2>
+
+              <div class="cart-summary-line">
+                <span>Items</span>
+                <strong id="cart-page-count">0</strong>
+              </div>
+
+              <div class="cart-summary-line">
+                <span>Subtotal</span>
+                <strong id="cart-page-subtotal">$0.00</strong>
+              </div>
+
+              <div class="cart-summary-line">
+                <span>Pickup</span>
+                <strong>No delivery fee</strong>
+              </div>
+
+              <div class="cart-summary-total">
+                <span>Total</span>
+                <strong id="cart-page-total">$0.00</strong>
+              </div>
+
+              <p class="cart-summary-note">
+                Any applicable taxes or additional charges will be shown
+                before payment, if applicable.
+              </p>
+
+              <a class="btn" id="cart-checkout-link" href="checkout.html">
+                Continue to Checkout
+              </a>
+            </div>
+
+            <div class="pickup-card">
+              <p class="pickup-eyebrow">Please note</p>
+              <h3>Pickup Information</h3>
+              <p>
+                Your order will be ready for pickup 3 days after your order
+                is placed. We will contact you the evening before to confirm
+                your pickup arrangements.
+              </p>
+              <address>
+                3460 SR 72<br>
+                Arcadia, FL 34266
+              </address>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <h3>Cassidy's Reserve</h3>
+        <p>Sourdough, specialty bakes, and thoughtfully chosen ingredients.</p>
+      </div>
+
+      <div>
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu &amp; Preorder</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Pickup</h3>
+        <p>3460 SR 72<br>Arcadia, FL 34266</p>
+      </div>
+
+      <p class="legal">
+        © <span id="cart-page-year"></span> Cassidy's Reserve. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    const CART_STORAGE_KEY = "cassidys-reserve-cart-v1";
+
+    const CART_PRODUCTS = {
+      "Plain Sourdough": { price: 10, image: "images/plain-sourdough.jpeg" },
+      "Jalapeño Cheddar": { price: 13, image: "" },
+      "Blueberry Lemon": { price: 13, image: "images/blueberryloaf.jpeg" },
+      "Pumpkin Spice": { price: 13, image: "" },
+      "Banana": { price: 13, image: "" },
+      "Homemade Pasta": { price: 7, image: "" },
+      "Dubai Pistachio Granola": { price: 6, image: "" },
+      "Italian Style Organic Sourdough Croutons": { price: 6, image: "" },
+      "Banana Walnut Muffin": { price: 4, image: "images/bananawalnutmuffin.jpeg" },
+      "Cherry Nut Bread Muffins": { price: 4, image: "" },
+      "Chocolate Cake": { price: 5, image: "" },
+      "Fudgy Brownies": { price: 5, image: "images/goldbrownies.jpeg" },
+      "Cinnamon Rolls": { price: 6, image: "images/cinnamonroll.jpeg" },
+      "Chocolate Chunk Sourdough Cookies": { price: 2, image: "images/chocolatechunkcookie.jpeg" }
+    };
+
+    const itemsHost = document.getElementById("cart-page-items");
+    const countHost = document.getElementById("cart-page-count");
+    const subtotalHost = document.getElementById("cart-page-subtotal");
+    const totalHost = document.getElementById("cart-page-total");
+    const messageHost = document.getElementById("cart-page-message");
+    const checkoutLink = document.getElementById("cart-checkout-link");
+
+    const formatMoney = amount =>
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(amount);
+
+    const escapeHtml = value =>
+      String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]);
+
+    function readCart() {
+      try {
+        const saved = JSON.parse(
+          localStorage.getItem(CART_STORAGE_KEY) || "[]"
+        );
+
+        if (!Array.isArray(saved)) return new Map();
+
+        const result = new Map();
+
+        for (const entry of saved) {
+          const name = entry?.name;
+          const quantity = Number(entry?.quantity);
+
+          if (
+            Object.hasOwn(CART_PRODUCTS, name) &&
+            Number.isInteger(quantity) &&
+            quantity > 0
+          ) {
+            result.set(name, Math.min(50, (result.get(name) || 0) + quantity));
+          }
+        }
+
+        return result;
+      } catch {
+        return new Map();
+      }
+    }
+
+    let cart = readCart();
+
+    function saveCart() {
+      try {
+        localStorage.setItem(
+          CART_STORAGE_KEY,
+          JSON.stringify(
+            [...cart.entries()].map(([name, quantity]) => ({
+              name,
+              quantity
+            }))
+          )
+        );
+        return true;
+      } catch {
+        messageHost.textContent =
+          "Your browser could not save the cart changes. Please check your browser settings.";
+        return false;
+      }
+    }
+
+    function renderCart() {
+      let itemCount = 0;
+      let subtotal = 0;
+
+      for (const [name, quantity] of cart) {
+        itemCount += quantity;
+        subtotal += CART_PRODUCTS[name].price * quantity;
+      }
+
+      countHost.textContent = String(itemCount);
+      subtotalHost.textContent = formatMoney(subtotal);
+      totalHost.textContent = formatMoney(subtotal);
+
+      checkoutLink.setAttribute(
+        "aria-disabled",
+        itemCount === 0 ? "true" : "false"
+      );
+
+      checkoutLink.style.opacity = itemCount === 0 ? ".5" : "1";
+      checkoutLink.style.pointerEvents = itemCount === 0 ? "none" : "auto";
+
+      if (cart.size === 0) {
+        itemsHost.innerHTML = `
+          <div class="cart-empty">
+            <h2>Your cart is empty</h2>
+            <p>Explore the menu and add something fresh from Cassidy's Reserve.</p>
+            <a class="btn" href="menu.html">Browse the Menu</a>
+          </div>
+        `;
+        return;
+      }
+
+      itemsHost.innerHTML = [...cart.entries()].map(([name, quantity]) => {
+        const product = CART_PRODUCTS[name];
+
+        const image = product.image
+          ? `<img class="cart-page-image" src="${escapeHtml(product.image)}" alt="" onerror="this.style.display='none'">`
+          : `<div class="cart-page-image cart-page-placeholder" aria-hidden="true">CR</div>`;
+
+        return `
+          <article class="cart-page-row">
+            ${image}
+
+            <div class="cart-page-product">
+              <h2>${escapeHtml(name)}</h2>
+              <p>${formatMoney(product.price)} each</p>
+
+              <div class="cart-page-controls" aria-label="Quantity controls for ${escapeHtml(name)}">
+                <button
+                  type="button"
+                  class="cart-page-quantity-button"
+                  data-change-quantity="${escapeHtml(name)}"
+                  data-delta="-1"
+                  aria-label="Remove one ${escapeHtml(name)}"
+                >−</button>
+
+                <span class="cart-page-quantity">${quantity}</span>
+
+                <button
+                  type="button"
+                  class="cart-page-quantity-button"
+                  data-change-quantity="${escapeHtml(name)}"
+                  data-delta="1"
+                  aria-label="Add one ${escapeHtml(name)}"
+                  ${quantity >= 50 ? "disabled" : ""}
+                >+</button>
+
+                <button
+                  type="button"
+                  class="cart-page-remove"
+                  data-remove-item="${escapeHtml(name)}"
+                >Remove</button>
+              </div>
+            </div>
+
+            <strong class="cart-page-line-total">
+              ${formatMoney(product.price * quantity)}
+            </strong>
+          </article>
+        `;
+      }).join("");
+    }
+
+    itemsHost.addEventListener("click", event => {
+      const changeButton = event.target.closest("[data-change-quantity]");
+      const removeButton = event.target.closest("[data-remove-item]");
+
+      if (changeButton) {
+        const name = changeButton.dataset.changeQuantity;
+        const current = cart.get(name) || 0;
+        const next = current + Number(changeButton.dataset.delta);
+
+        if (next <= 0) {
+          cart.delete(name);
+        } else {
+          cart.set(name, Math.min(50, next));
+        }
+
+        if (saveCart()) {
+          messageHost.textContent = "Cart updated.";
+          renderCart();
+        }
+      }
+
+      if (removeButton) {
+        cart.delete(removeButton.dataset.removeItem);
+
+        if (saveCart()) {
+          messageHost.textContent = "Item removed from your cart.";
+          renderCart();
+        }
+      }
+    });
+
+    checkoutLink.addEventListener("click", event => {
+      if (cart.size === 0) {
+        event.preventDefault();
+        messageHost.textContent = "Add at least one item before checkout.";
+      }
+    });
+
+    document.getElementById("cart-page-year").textContent =
+      new Date().getFullYear();
+
+    renderCart();
+  </script>
+</body>
+</html>

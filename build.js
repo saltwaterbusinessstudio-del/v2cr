@@ -1,3 +1,4 @@
+
 const fs = require("fs");
 const path = require("path");
 
@@ -10,6 +11,9 @@ fs.mkdirSync(dist, { recursive: true });
 const files = [
   "index.html",
   "menu.html",
+  "cart.html",
+  "checkout.html",
+  "success.html",
   "faq.html",
   "style.css",
   "logo.png",

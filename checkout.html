@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Checkout | Cassidy's Reserve</title>
+  <meta name="description" content="Complete your Cassidy's Reserve sourdough and specialty bake preorder.">
+
+  <link rel="icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    .checkout-page {
+      padding: 48px 0 76px;
+      min-height: 55vh;
+    }
+
+    .checkout-heading {
+      margin-bottom: 32px;
+    }
+
+    .checkout-heading h1 {
+      margin-bottom: 10px;
+    }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 32px;
+      align-items: start;
+    }
+
+    .checkout-panel,
+    .checkout-summary {
+      background: var(--paper, #fbfaf7);
+      border: 1px solid var(--line, #dcd8cd);
+      padding: 28px;
+      border-radius: 4px;
+      min-width: 0;
+    }
+
+    .checkout-panel h2,
+    .checkout-summary h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .checkout-form {
+      display: grid;
+      gap: 17px;
+    }
+
+    .checkout-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .checkout-field label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .checkout-field input,
+    .checkout-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 13px;
+      border: 1px solid var(--line, #dcd8cd);
+      border-radius: 3px;
+      background: #fff;
+      color: var(--ink, #2b2b2c);
+      font: inherit;
+    }
+
+    .checkout-field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .checkout-field input:focus,
+    .checkout-field textarea:focus {
+      outline: 2px solid var(--wheat, #b98e3c);
+      outline-offset: 1px;
+    }
+
+    .checkout-summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line, #dcd8cd);
+      font-size: 0.95rem;
+    }
+
+    .checkout-summary-row span:first-child {
+      overflow-wrap: anywhere;
+    }
+
+    .checkout-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 20px;
+      margin-top: 4px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .checkout-pickup {
+      margin-top: 24px;
+      padding: 18px;
+      background: var(--flour, #f1eee7);
+      border-radius: 3px;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .checkout-pickup strong {
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .checkout-submit {
+      width: 100%;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+
+    .checkout-submit:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    .checkout-message {
+      margin: 16px 0 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .checkout-message[hidden],
+    #embedded-checkout[hidden],
+    #checkout-form[hidden],
+    #checkout-layout[hidden],
+    #empty-cart[hidden] {
+      display: none;
+    }
+
+    #embedded-checkout {
+      margin-top: 24px;
+    }
+
+    .checkout-back {
+      display: inline-block;
+      margin-top: 22px;
+      color: var(--ink, #2b2b2c);
+    }
+
+    .checkout-empty {
+      padding: 24px 0;
+    }
+
+    @media (max-width: 760px) {
+      .checkout-page {
+        padding: 32px 0 52px;
+      }
+
+      .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .checkout-panel,
+      .checkout-summary {
+        padding: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Cassidy's Reserve home">
+        <img src="logo.png" alt="">
+        <span>Cassidy's Reserve</span>
+      </a>
+
+      <nav class="nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQ</a>
+        <a class="btn small" href="menu.html">Menu &amp; Preorder</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="checkout-page">
+    <div class="wrap">
+      <div class="checkout-heading">
+        <p class="eyebrow">Cassidy's Reserve</p>
+        <h1>Checkout</h1>
+        <p>Review your order and securely complete your payment.</p>
+      </div>
+
+      <div id="empty-cart" class="checkout-empty" hidden>
+        <h2>Your cart is empty</h2>
+        <p>Add your favorite bakes before checking out.</p>
+        <a class="btn" href="menu.html">Browse the menu</a>
+      </div>
+
+      <div id="checkout-layout" class="checkout-layout">
+        <section class="checkout-panel">
+          <h2>Your information</h2>
+
+          <form id="checkout-form" class="checkout-form">
+            <div class="checkout-field">
+              <label for="customer-name">Full name</label>
+              <input id="customer-name" name="name" type="text" autocomplete="name" required maxlength="200">
+            </div>
+
+            <div class="checkout-field">
+              <label for="customer-email">Email address</label>
+              <input id="customer-email" name="email" type="email" autocomplete="email" required maxlength="254">
+            </div>
+
+            <div class="checkout-field">
+              <label for="customer-phone">Phone number</label>
+              <input id="customer-phone" name="phone" type="tel" autocomplete="tel" required maxlength="30">
+            </div>
+
+            <div class="checkout-field">
+              <label for="order-notes">Order notes (optional)</label>
+              <textarea id="order-notes" name="notes" maxlength="500" placeholder="Anything we should know about your order?"></textarea>
+            </div>
+
+            <button class="btn checkout-submit" id="continue-to-payment" type="submit">
+              Continue to payment
+            </button>
+          </form>
+
+          <p id="checkout-message" class="checkout-message" role="status" aria-live="polite" hidden></p>
+
+          <div id="embedded-checkout" hidden></div>
+
+          <a class="checkout-back" href="cart.html">← Return to cart</a>
+        </section>
+
+        <aside class="checkout-summary">
+          <h2>Order summary</h2>
+
+          <div id="checkout-items"></div>
+
+          <div class="checkout-total">
+            <span>Total</span>
+            <span id="checkout-total">$0.00</span>
+          </div>
+
+          <div class="checkout-pickup">
+            <strong>Pickup information</strong>
+            Your order will be ready for pickup three days after your order is placed. We will contact you the evening before to confirm your pickup arrangements.
+
+            <p>
+              <strong>Pickup location</strong>
+              3460 SR 72<br>
+              Arcadia, FL 34266
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Cassidy's Reserve Sourdough &amp; Specialty Bakes</p>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const CART_KEY = "cassidys-reserve-cart-v1";
+
+      const STRIPE_PUBLISHABLE_KEY =
+        "pk_live_51UONNeHfuy1oMF0iRSDT9ohC1QV0rPkKDU520bWx7bhWiViWfr57DPLEjjKx0c5s4PGohSB47hF7MqWZoxkLsCO700Frc3ntYB";
+
+      const PRODUCTS = {
+        "Plain Sourdough": 10,
+        "Jalapeño Cheddar": 13,
+        "Blueberry Lemon": 13,
+        "Pumpkin Spice": 13,
+        "Banana": 13,
+        "Homemade Pasta": 7,
+        "Dubai Pistachio Granola": 6,
+        "Italian Style Organic Sourdough Croutons": 6,
+        "Banana Walnut Muffin": 4,
+        "Cherry Nut Bread Muffins": 4,
+        "Chocolate Cake": 5,
+        "Fudgy Brownies": 5,
+        "Cinnamon Rolls": 6,
+        "Chocolate Chunk Sourdough Cookies": 2
+      };
+
+      const form = document.getElementById("checkout-form");
+      const submitButton = document.getElementById("continue-to-payment");
+      const message = document.getElementById("checkout-message");
+      const itemsContainer = document.getElementById("checkout-items");
+      const totalElement = document.getElementById("checkout-total");
+      const checkoutLayout = document.getElementById("checkout-layout");
+      const emptyCart = document.getElementById("empty-cart");
+      const embeddedContainer = document.getElementById("embedded-checkout");
+
+      let stripeCheckout = null;
+
+      function readCart() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+
+          if (!Array.isArray(saved)) return [];
+
+          return saved
+            .filter(item =>
+              item &&
+              typeof item.name === "string" &&
+              Object.prototype.hasOwnProperty.call(PRODUCTS, item.name) &&
+              Number.isInteger(Number(item.quantity)) &&
+              Number(item.quantity) >= 1 &&
+              Number(item.quantity) <= 50
+            )
+            .map(item => ({
+              name: item.name,
+              quantity: Number(item.quantity)
+            }));
+        } catch {
+          return [];
+        }
+      }
+
+      function money(amount) {
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD"
+        }).format(amount);
+      }
+
+      function showMessage(text) {
+        message.textContent = text;
+        message.hidden = false;
+      }
+
+      function renderSummary(cart) {
+        itemsContainer.replaceChildren();
+
+        let total = 0;
+
+        for (const item of cart) {
+          const lineTotal = PRODUCTS[item.name] * item.quantity;
+          total += lineTotal;
+
+          const row = document.createElement("div");
+          row.className = "checkout-summary-row";
+
+          const label = document.createElement("span");
+          label.textContent = `${item.name} × ${item.quantity}`;
+
+          const price = document.createElement("span");
+          price.textContent = money(lineTotal);
+
+          row.append(label, price);
+          itemsContainer.appendChild(row);
+        }
+
+        totalElement.textContent = money(total);
+      }
+
+      const cart = readCart();
+
+      if (cart.length === 0) {
+        checkoutLayout.hidden = true;
+        emptyCart.hidden = false;
+        return;
+      }
+
+      renderSummary(cart);
+
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (stripeCheckout) return;
+
+        if (!window.Stripe) {
+          showMessage("Stripe could not load. Check your internet connection and try again.");
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Preparing secure payment…";
+        message.hidden = true;
+
+        try {
+          const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+          const formData = new FormData(form);
+
+          const response = await fetch("/api/create-checkout-session", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              cart,
+              name: String(formData.get("name") || "").trim(),
+              email: String(formData.get("email") || "").trim(),
+              phone: String(formData.get("phone") || "").trim(),
+              notes: String(formData.get("notes") || "").trim()
+            })
+          });
+
+          let result;
+
+          try {
+            result = await response.json();
+          } catch {
+            throw new Error("The checkout service returned an invalid response.");
+          }
+
+          if (!response.ok || !result.clientSecret) {
+            throw new Error(
+              result.error || "We couldn't start checkout. Please try again."
+            );
+          }
+
+          stripeCheckout = await stripe.initEmbeddedCheckout({
+            fetchClientSecret: async () => result.clientSecret
+          });
+
+          form.hidden = true;
+          embeddedContainer.hidden = false;
+          stripeCheckout.mount("#embedded-checkout");
+        } catch (error) {
+          console.error("Checkout initialization failed:", error);
+
+          if (stripeCheckout) {
+            try {
+              stripeCheckout.destroy();
+            } catch {}
+            stripeCheckout = null;
+          }
+
+          form.hidden = false;
+          embeddedContainer.hidden = true;
+
+          showMessage(
+            error.message || "We couldn't start checkout. Please try again."
+          );
+
+          submitButton.disabled = false;
+          submitButton.textContent = "Continue to payment";
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

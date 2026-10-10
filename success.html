@@ -1,0 +1,273 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Order Confirmation | Cassidy's Reserve</title>
+  <meta name="description" content="Thank you for ordering from Cassidy's Reserve. Find your next steps and pickup information here.">
+
+  <link rel="icon" href="logo.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    .confirmation {
+      min-height: 65vh;
+      padding-block: clamp(4rem, 10vw, 7rem);
+      display: grid;
+      place-items: center;
+    }
+
+    .confirmation-card {
+      width: min(720px, 100% - 2.5rem);
+      margin-inline: auto;
+      padding: clamp(2rem, 6vw, 4rem);
+      text-align: center;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(43, 43, 44, .06);
+    }
+
+    .confirmation-mark {
+      display: grid;
+      place-items: center;
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 1.75rem;
+      border: 1px solid var(--sage);
+      border-radius: 50%;
+      color: var(--sage);
+      font-size: 1.8rem;
+    }
+
+    .confirmation-eyebrow {
+      margin: 0 0 .9rem;
+      color: var(--wheat-dark);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .confirmation-card h1 {
+      margin-bottom: 1.25rem;
+      font-size: clamp(2.5rem, 6vw, 3.8rem);
+    }
+
+    .confirmation-intro {
+      max-width: 510px;
+      margin: 0 auto 2rem;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .pickup-details {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--flour);
+      text-align: left;
+    }
+
+    .pickup-details h2 {
+      margin-bottom: 1rem;
+      font-size: 1.65rem;
+    }
+
+    .pickup-details p {
+      margin-bottom: .8rem;
+      font-size: .95rem;
+    }
+
+    .pickup-details p:last-child {
+      margin-bottom: 0;
+    }
+
+    .confirmation-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .8rem;
+      margin-top: 2rem;
+    }
+
+    .payment-status {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    @media (max-width: 520px) {
+      .confirmation-card {
+        width: calc(100% - 1.5rem);
+        padding: 2rem 1.25rem;
+      }
+
+      .pickup-details {
+        padding: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Cassidy's Reserve home">
+        <img src="logo.png" alt="Cassidy's Reserve logo">
+        <span>Cassidy's Reserve</span>
+      </a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="faq.html">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="confirmation">
+      <div class="confirmation-card">
+        <div class="confirmation-mark" aria-hidden="true">✓</div>
+
+        <p class="confirmation-eyebrow">Cassidy's Reserve</p>
+<h1 id="confirmation-title">Checking your payment…</h1>
+
+<p class="confirmation-intro" id="confirmation-message">
+  We're verifying your payment with Stripe. Please wait.
+</p>
+
+        <div class="pickup-details">
+          <h2>What happens next</h2>
+
+          <p><strong>Made for you.</strong> Your order will be ready three days after your order is placed.</p>
+
+          <p><strong>Pickup confirmation.</strong> Cassidy will contact you the evening before your pickup to confirm the details.</p>
+
+          <p><strong>Pickup location.</strong><br>
+            3460 SR 72<br>
+            Arcadia, FL 34266
+          </p>
+        </div>
+
+        <p class="muted">
+          Questions about your order? Please use the contact information provided on our website.
+        </p>
+
+        <div class="confirmation-actions">
+          <a class="btn" href="menu.html">Explore the menu</a>
+          <a class="btn ghost" href="index.html">Return home</a>
+        </div>
+
+        <p class="payment-status" id="payment-status" role="status" aria-live="polite">
+          Checking payment status…
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <h3>Cassidy's Reserve</h3>
+        <p>Thoughtfully made sourdough and specialty bakes.</p>
+      </div>
+
+      <div>
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu &amp; Preorder</a></li>
+          <li><a href="faq.html">Frequently Asked Questions</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Pickup</h3>
+        <p>3460 SR 72<br>Arcadia, FL 34266</p>
+      </div>
+
+      <p class="legal">
+        © <span id="year"></span> Cassidy's Reserve. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
+
+  const title = document.getElementById("confirmation-title");
+  const message = document.getElementById("confirmation-message");
+  const status = document.getElementById("payment-status");
+
+  async function verifyPayment() {
+    if (!sessionId) {
+      title.textContent = "We couldn't confirm your order yet.";
+      message.textContent =
+        "If you just completed checkout, check your Stripe receipt before trying to pay again.";
+      status.textContent = "No payment reference was provided.";
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `/api/verify-checkout-session?session_id=${encodeURIComponent(sessionId)}`,
+        { cache: "no-store" }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Payment verification is unavailable.");
+      }
+
+      if (result.paid === true) {
+        title.textContent = "Thank you! Your order is confirmed.";
+
+        message.textContent =
+          "Your payment was successful. Thank you for supporting Cassidy's Reserve!";
+
+        status.textContent = "Payment confirmed by Stripe.";
+
+        // Empty the saved cart only after Stripe confirms payment.
+        try {
+          localStorage.removeItem("cassidys-reserve-cart-v1");
+        } catch (error) {
+          // Confirmation still works if browser storage is unavailable.
+        }
+
+        return;
+      }
+
+      title.textContent = "We're checking your order.";
+
+      message.textContent =
+        "Stripe hasn't confirmed your payment yet. Please check your Stripe receipt or contact Cassidy before attempting another payment.";
+
+      status.textContent =
+        "Payment has not been confirmed. No further payment is needed until you check its status.";
+
+    } catch (error) {
+      title.textContent = "Your payment status is still being checked.";
+
+      message.textContent =
+        "We couldn't verify your payment just now. Please check your Stripe receipt and don't submit another payment until you know whether the first one succeeded.";
+
+      status.textContent =
+        "Temporary verification issue. Your payment has not been confirmed on this page.";
+    }
+  }
+
+  verifyPayment();
+</script>
+</body>
+</html>
+```
