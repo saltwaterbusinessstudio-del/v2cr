@@ -1,3 +1,4 @@
+
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "v2cr",
@@ -7,10 +8,7 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
-  }
-}
-
-{
+  },
   "observability": {
     "logs": {
       "enabled": true,
