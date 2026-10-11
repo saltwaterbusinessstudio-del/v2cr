@@ -1,6 +1,6 @@
 
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+"$schema": "https://unpkg.com/wrangler@4/config-schema.json",
   "name": "v2cr",
   "main": "worker.js",
   "compatibility_date": "2026-10-09",

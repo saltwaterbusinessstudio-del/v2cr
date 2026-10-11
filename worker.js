@@ -115,7 +115,7 @@ if (url.pathname === "/api/verify-checkout-session") {
         }
 
         const params = new URLSearchParams();
-        params.set("ui_mode", "embedded");
+params.set("ui_mode", "embedded_page");
         params.set("mode", "payment");
 params.set(
   "return_url",

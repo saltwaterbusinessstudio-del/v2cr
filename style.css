@@ -1094,3 +1094,136 @@ section { padding-block: clamp(3rem, 7vw, 5.5rem); }
 }
 
 
+
+/* Keep cart checkout button text visible */
+#cart-checkout-link,
+#cart-checkout-link:link,
+#cart-checkout-link:visited {
+  color: var(--paper);
+}
+
+#cart-checkout-link:hover {
+  color: #fff;
+}
+
+
+/* ---------- Homepage baker's note ---------- */
+
+section.baker-note {
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+
+.baker-note-inner {
+  display: grid;
+  grid-template-columns: .7fr 1.3fr;
+  gap: clamp(2rem, 6vw, 5.5rem);
+  align-items: start;
+}
+
+.baker-note-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: .6rem;
+}
+
+.baker-note-label {
+  flex: none;
+  color: var(--wheat-dark);
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .13em;
+  line-height: 1.7;
+  text-transform: uppercase;
+}
+
+.baker-note-rule {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--wheat);
+}
+
+.baker-note-copy h2 {
+  max-width: 17ch;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.baker-note-copy > p:not(.baker-note-signoff) {
+  max-width: 66ch;
+  margin: 0 0 1.2rem;
+  color: var(--muted);
+  font-size: .96rem;
+  line-height: 1.9;
+}
+
+.baker-note-copy strong {
+  color: var(--charcoal);
+  font-weight: 600;
+}
+
+.baker-note-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  margin-top: .35rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--wheat);
+  color: var(--charcoal);
+  font-size: .88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .15s, border-color .15s;
+}
+
+.baker-note-link:hover {
+  color: var(--wheat-dark);
+  border-color: var(--wheat-dark);
+}
+
+.baker-note-signoff {
+  margin: 2.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--charcoal);
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .baker-note-inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .baker-note-heading {
+    padding-top: 0;
+  }
+
+  .baker-note-copy h2 {
+    max-width: 24ch;
+  }
+
+  .baker-note-signoff {
+    margin-top: 2rem;
+  }
+}
+
+
+/* Fix View Cart button text visibility */
+a.btn.cart-view-button,
+a.btn.cart-view-button:link,
+a.btn.cart-view-button:visited {
+  color: var(--paper);
+}
+
+a.btn.cart-view-button:hover {
+  color: #fff;
+}
