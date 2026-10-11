@@ -174,8 +174,7 @@ params.set(
         const session = await stripeResponse.json();
 
         if (!stripeResponse.ok) {
-          console.error("Stripe session creation failed:", session.error?.type);
-          return json({
+console.error("Stripe session creation failed:", JSON.stringify(session.error));          return json({
             error: "Stripe could not start checkout. Please try again."
           }, 502);
         }
