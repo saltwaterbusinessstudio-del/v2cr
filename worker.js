@@ -13,7 +13,8 @@ const PRODUCTS = {
   "Chocolate Cake": 500,
   "Fudgy Brownies": 500,
   "Cinnamon Rolls": 600,
-  "Chocolate Chunk Sourdough Cookies": 200
+  "Chocolate Chunk Sourdough Cookies": 200,
+  "Test Item": 50
 };
 
 function json(data, status = 200) {
